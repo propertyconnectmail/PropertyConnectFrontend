@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,13 @@ import { tap } from 'rxjs/operators';
 
 export class AuthService {
 
-  private apiUrl = 'http://localhost:5000/api/auth/web/';
+  private apiUrl = `${environment.apiUrl}/auth/`;
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) {}
 
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(this.apiUrl, credentials).pipe(
+    return this.http.post(this.apiUrl+'web', credentials).pipe(
       tap(response => {
         localStorage.setItem('user', JSON.stringify(response));
         this.loggedIn.next(true);
