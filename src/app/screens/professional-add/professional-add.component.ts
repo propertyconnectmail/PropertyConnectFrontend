@@ -82,7 +82,7 @@ export class ProfessionalAddComponent implements OnInit {
         this.professionalService.getProfessionalForm(this.body).subscribe(async(professional:any) => {
           if(professional.email === id){
             this.loadData(professional);
-            this.isFileInputDisabled = true; // or false to enable it
+            this.isFileInputDisabled = true;
             this.downloadedFiles = professional.certifications.map((url: string) => {
               const name = url.split('/').pop(); // Extract filename from URL
               return { name, url };
@@ -116,15 +116,6 @@ export class ProfessionalAddComponent implements OnInit {
         })
         return;
       }
-
-      // if (this.mode === 'edit') {
-      //   this.id = params.get('id');
-      //   // Load data to populate the form for editing
-      // } else if (this.mode === 'view') {
-      //   // Load data but disable form
-      // } else if (this.mode === 'delete') {
-      //   // Confirm deletion or show a preview
-      // }
     });
 
     this.form = this.fb.group({
@@ -141,9 +132,9 @@ export class ProfessionalAddComponent implements OnInit {
       dobDay: ['', [Validators.required]],
       dobYear: ['', [Validators.required]],
       consultationFee: ['', [Validators.required]],
-      url: [''], // You can update it when a file is uploaded
-      status: [''], // Default value for status, can be changed
-      certifications: [[]], // Empty initially
+      url: [''],
+      status: [''], 
+      certifications: [[]], 
     });
 
     this.form.get('firstName')?.valueChanges.subscribe(() => this.setAutoPassword());
@@ -153,8 +144,8 @@ export class ProfessionalAddComponent implements OnInit {
   loadData(professional : any) : void{
     const [day, month, year] = professional.dob.split('/');
 
-    const monthIndex = parseInt(month, 10) - 1; // Convert to 0-based index
-    const monthName = this.months[monthIndex]; // Get month name from array
+    const monthIndex = parseInt(month, 10) - 1; 
+    const monthName = this.months[monthIndex]; 
 
     this.form.patchValue({
       firstName: professional.firstName,
@@ -198,13 +189,6 @@ export class ProfessionalAddComponent implements OnInit {
     this.toastService.showToast('Files downloaded successfully!', 'success');
   }
   
-  
-  
-  
-  
-  
-
-
   setAutoPassword(): void {
     const firstName = this.form.get('firstName')?.value || '';
     const dobYear = this.form.get('dobYear')?.value || '';
@@ -215,8 +199,8 @@ export class ProfessionalAddComponent implements OnInit {
 
 
   formFields = [
-    { key: 'firstName', label: 'First Name', placeholder: 'Enter your first name', error:'Please enter a valid first name' },
-    { key: 'lastName', label: 'Last Name', placeholder: 'Enter your last name', error:'Please enter a valid last name' },
+    { key: 'firstName', label: 'First Name', placeholder: 'Enter your first name', error:'Please enter a valid first name with atleast 3 letters' },
+    { key: 'lastName', label: 'Last Name', placeholder: 'Enter your last name', error:'Please enter a valid last name with atleast 3 letters' },
     { key: 'email', label: 'Email Address', placeholder: 'Enter your email', error:'Please enter a valid email' },
     { key: 'nic', label: 'NIC', placeholder: 'Enter your ID number', error:'Please enter a valid ID' },
     { key: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number', error:'Phone number should be 10 digits' },
@@ -326,7 +310,7 @@ export class ProfessionalAddComponent implements OnInit {
               })
             }
             if(await res.Type === 'Joi'){
-              this.toastService.showToast(res.Error, 'error');
+              this.toastService.showToast('Please enter valid details and try again!', 'error');
                 setTimeout(() => {
                   this.isSubmitting = false;
               }, 1500);
@@ -379,7 +363,7 @@ export class ProfessionalAddComponent implements OnInit {
           }
 
           this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
-            this.toastService.showToast('Professional updated successfully!', 'success');
+            this.toastService.showToast('Professional updated successfully!', 'info');
             setTimeout(() => {
               this.isSubmitting = false;
               this.location.back();
@@ -387,7 +371,7 @@ export class ProfessionalAddComponent implements OnInit {
           }) 
         }
         if(await res.Type === 'Joi'){
-          this.toastService.showToast(res.Error, 'error');
+          this.toastService.showToast('Please enter valid details and try again!', 'error');
             setTimeout(() => {
               this.isSubmitting = false;
           }, 1500);
@@ -440,12 +424,6 @@ export class ProfessionalAddComponent implements OnInit {
             }, 1500);
           }) 
         }
-        if(await res.Type === 'Joi'){
-          this.toastService.showToast(res.Error, 'error');
-            setTimeout(() => {
-              this.isSubmitting = false;
-          }, 1500);
-        }
       })
     } else {
       this.toastService.showToast('Please enter valid details for all fields!', 'error');
@@ -461,17 +439,10 @@ export class ProfessionalAddComponent implements OnInit {
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    // Convert month name to 2-digit month number
     const monthIndex = monthNames.indexOf(formData.dobMonth) + 1;
     const month = String(monthIndex).padStart(2, '0');
-
-    // Pad day to 2 digits
     const day = String(formData.dobDay).padStart(2, '0');
-
-    // Use year as-is
     const year = formData.dobYear;
-
-    // Final DOB string in DD/MM/YYYY format
     const dob = `${day}/${month}/${year}`;
 
     return dob

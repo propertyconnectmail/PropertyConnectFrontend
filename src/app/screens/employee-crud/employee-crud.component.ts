@@ -205,7 +205,7 @@ export class EmployeeCrudComponent {
           }) 
         }
         if(await res.Type === 'Joi'){
-          this.toastService.showToast(res.Error, 'error');
+          this.toastService.showToast('Please enter valid details and try again!', 'error');
             setTimeout(() => {
               this.isSubmitting = false;
           }, 1500);
@@ -261,7 +261,7 @@ export class EmployeeCrudComponent {
             }) 
           }
           if(await res.Type === 'Joi'){
-            this.toastService.showToast(res.Error, 'error');
+            this.toastService.showToast('Please enter valid details and try again!', 'error');
               setTimeout(() => {
                 this.isSubmitting = false;
             }, 1500);
@@ -307,18 +307,12 @@ export class EmployeeCrudComponent {
             }
   
             this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
-              this.toastService.showToast('Employee deleted successfully!', 'success');
+              this.toastService.showToast('Employee deleted successfully!', 'info');
               setTimeout(() => {
                 this.isSubmitting = false;
                 this.location.back();
               }, 1500);
             }) 
-          }
-          if(await res.Type === 'Joi'){
-            this.toastService.showToast(res.Error, 'error');
-              setTimeout(() => {
-                this.isSubmitting = false;
-            }, 1500);
           }
         })
       } else {

@@ -10,10 +10,19 @@ import { filter } from 'rxjs/operators';
 })
 export class TopbarComponent implements OnInit {
   pageTitle: string = '';
+  imageUrl = "";
+  name = "";
+  type = "";
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
+    const storedUser : any = localStorage.getItem('user');
+    const user = JSON.parse(storedUser);
+
+    this.imageUrl = user.url;
+    this.name = user.firstName+ ' '+user.lastName;
+    this.type = user.type;
     this.setPageTitle(this.router.url);
 
     // Listen for route changes and update the title accordingly

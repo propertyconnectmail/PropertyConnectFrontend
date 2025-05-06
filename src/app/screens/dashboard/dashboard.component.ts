@@ -3,6 +3,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
 import { AuthService } from '../../core/services/auth/auth.service';
 import { AppComponent } from '../../app.component';
 import { PlatformService } from '../../core/services/platform/platform.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -41,7 +42,7 @@ import { PlatformService } from '../../core/services/platform/platform.service';
 })
 export class DashboardComponent {
 
-  constructor(private authService: AuthService, private appComponent: AppComponent, private platformService : PlatformService) {}
+  constructor(private authService: AuthService, private appComponent: AppComponent, private platformService : PlatformService, private router: Router) {}
   
   loadingPlatformConfig = true;
   
@@ -174,5 +175,9 @@ export class DashboardComponent {
     if (confirm('Are you sure you want to logout?')) {
       this.onSeeAll();
     }
+  }
+
+  goToLogs(){
+    this.router.navigate(['/log']);
   }
 }

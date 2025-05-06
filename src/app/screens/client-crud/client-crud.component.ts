@@ -110,8 +110,8 @@ export class ClientCrudComponent implements OnInit {
     loadData(client : any) : void{
       const [day, month, year] = client.dob.split('/');
   
-      const monthIndex = parseInt(month, 10) - 1; // Convert to 0-based index
-      const monthName = this.months[monthIndex]; // Get month name from array
+      const monthIndex = parseInt(month, 10) - 1;
+      const monthName = this.months[monthIndex];
   
       this.form.patchValue({
         firstName: client.firstName,
@@ -210,7 +210,7 @@ export class ClientCrudComponent implements OnInit {
           })
         }
         if(await res.Type === 'Joi'){
-          this.toastService.showToast(res.Error, 'error');
+          this.toastService.showToast('Please enter valid details and try again!', 'error');
             setTimeout(() => {
               this.isSubmitting = false;
           }, 1500);
@@ -258,7 +258,7 @@ export class ClientCrudComponent implements OnInit {
             }
   
             this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
-              this.toastService.showToast('Client updated successfully!', 'success');
+              this.toastService.showToast('Client updated successfully!', 'info');
               setTimeout(() => {
                 this.isSubmitting = false;
                 this.location.back();
@@ -266,7 +266,7 @@ export class ClientCrudComponent implements OnInit {
             }) 
           }
           if(await res.Type === 'Joi'){
-            this.toastService.showToast(res.Error, 'error');
+            this.toastService.showToast('Please enter valid details and try again!', 'error');
               setTimeout(() => {
                 this.isSubmitting = false;
             }, 1500);
@@ -319,12 +319,6 @@ export class ClientCrudComponent implements OnInit {
               }, 1500);
             }) 
           }
-          if(await res.Type === 'Joi'){
-            this.toastService.showToast(res.Error, 'error');
-              setTimeout(() => {
-                this.isSubmitting = false;
-            }, 1500);
-          }
         })
       } else {
         this.toastService.showToast('Please enter valid details for all fields!', 'error');
@@ -340,17 +334,10 @@ export class ClientCrudComponent implements OnInit {
         'July', 'August', 'September', 'October', 'November', 'December'
       ];
   
-      // Convert month name to 2-digit month number
       const monthIndex = monthNames.indexOf(formData.dobMonth) + 1;
       const month = String(monthIndex).padStart(2, '0');
-  
-      // Pad day to 2 digits
       const day = String(formData.dobDay).padStart(2, '0');
-  
-      // Use year as-is
       const year = formData.dobYear;
-  
-      // Final DOB string in DD/MM/YYYY format
       const dob = `${day}/${month}/${year}`;
   
       return dob

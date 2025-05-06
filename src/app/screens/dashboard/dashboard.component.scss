@@ -172,7 +172,34 @@ $font: 'Manrope', sans-serif;
       //     transform: scaleX(1);
       //   }
       // }
-    }         
+    }
+    
+    .new-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #FFFFFF;
+      color: #18a0fb;
+      padding: 0.65rem 1.25rem;
+      border: 1px solid #18a0fb;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 8px rgba(24, 160, 251, 0.15);
+      height: 10px;
+  
+      &:hover {
+        background-color: #18a0fb;
+        color: white;
+        transform: translateY(-1px);
+      }
+  
+      &:active {
+        transform: scale(0.97);
+      }
+    }
   }
 
   .activity-feed {
