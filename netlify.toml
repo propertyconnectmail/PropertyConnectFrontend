@@ -1,6 +1,6 @@
 [build]
   command = "ng build --configuration production"
-  publish = "dist/property-connect-frontend"
+  publish = "dist/property-connect-frontend/browser"
 
 [[redirects]]
   from = "/*"
