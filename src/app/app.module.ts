@@ -28,6 +28,7 @@ import { OfficialComponent } from './screens/official/official.component';
 import { OfficialCrudComponent } from './screens/official-crud/official-crud.component';
 import { LogsComponent } from './screens/logs/logs.component';
 import { SettingComponent } from './screens/setting/setting.component';
+import { PaymentComponent } from './screens/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SettingComponent } from './screens/setting/setting.component';
     OfficialComponent,
     OfficialCrudComponent,
     LogsComponent,
-    SettingComponent
+    SettingComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,

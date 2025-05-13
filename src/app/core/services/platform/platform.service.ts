@@ -30,7 +30,7 @@ export class PlatformService {
   }
 
   updateMaintenanceMode(data: any) {
-    return this.http.post<any>(this.platform + 'update/maintainance', null);
+    return this.http.post<any>(this.platform + 'update/maintainance', data);
   }
 
   createAuditLog(data: any) {

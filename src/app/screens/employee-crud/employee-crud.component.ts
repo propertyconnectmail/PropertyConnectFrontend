@@ -13,7 +13,7 @@ import { EmployeeService } from '../../_services/employee/employee.service';
   templateUrl: './employee-crud.component.html',
   styleUrl: './employee-crud.component.scss'
 })
-export class EmployeeCrudComponent {
+export class EmployeeCrudComponent implements OnInit {
 
   mode: string = '';
   id: string | null = null;
@@ -176,7 +176,7 @@ export class EmployeeCrudComponent {
 
         this.isSubmitting = true;
 
-        employee.url = 'http://<host>:<port>/<static-path>/<optional-subfolders>/<filename>'
+        employee.url = 'https://property-connect-bucket.s3.eu-north-1.amazonaws.com/profile-image.svg'
         console.log(employee)
         this.employeeService.postEmployeeForm(employee).subscribe(async(res:any) => {
           console.log(res)
@@ -192,7 +192,7 @@ export class EmployeeCrudComponent {
             id: '',
             actionType: 'create',
             performedBy: user.email,
-            description: 'Created employee '+employee.email+' ',
+            description: 'Created employee - '+employee.email+' ',
             date: dateString
           }
 
@@ -248,7 +248,7 @@ export class EmployeeCrudComponent {
               id: '',
               actionType: 'update',
               performedBy: user.email,
-              description: 'Updated employee '+employee.email+' ',
+              description: 'Updated employee - '+employee.email+' ',
               date: dateString
             }
   
@@ -302,7 +302,7 @@ export class EmployeeCrudComponent {
               id: '',
               actionType: 'delete',
               performedBy: user.email,
-              description: 'Deleted employee '+employee.email+' ',
+              description: 'Deleted employee - '+employee.email+' ',
               date: dateString
             }
   

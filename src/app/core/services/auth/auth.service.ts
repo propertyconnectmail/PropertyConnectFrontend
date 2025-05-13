@@ -20,14 +20,15 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(this.apiUrl+'web', credentials).pipe(
-      tap(response => {
-        localStorage.setItem('user', JSON.stringify(response));
-        this.loggedIn.next(true);
-      })
-    );
+  login(body: any): Observable<any> {
+    return this.http.post(this.apiUrl + 'web', body);
   }
+
+  setLoginState(state: boolean): void {
+    this.loggedIn.next(state);
+  }
+
+
 
   logout(): void {
     localStorage.removeItem('user');

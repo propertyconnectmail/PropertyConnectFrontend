@@ -44,8 +44,8 @@ export class LogsComponent {
     loading = false;
     initialLoad = true;
   
-    officials: Official[] = [];
-    orginalOfficials: Official[] = [];
+    logs: Official[] = [];
+    orginalLogs: Official[] = [];
     paginatedData: Official[] = [];
   
   
@@ -59,19 +59,19 @@ export class LogsComponent {
           if (res && res.length > 0) {
   
             // Store the original list
-            this.officials = res.map((prof: any) => {
-              const { _id, firstName, lastName, ...rest } = prof;
+            this.logs = res.map((log: any) => {
+              const { _id, firstName, lastName, ...rest } = log;
               return {
                 ...rest,
                 fullName: `${firstName} ${lastName}`
               };
             });
 
-            console.log(this.officials)
+            console.log(this.logs)
   
-            // Initialize the officials list
-            this.officials = [...this.officials];
-            this.orginalOfficials = [...this.officials];
+            // Initialize the logs list
+            this.logs = [...this.logs];
+            this.orginalLogs = [...this.logs];
   
             this.updatePagination();
   
@@ -80,14 +80,14 @@ export class LogsComponent {
               this.loading = false;
             }, 500);
           } else {
-            this.officials = [];
+            this.logs = [];
             this.isLoading = false;
             this.loading = false;
           }
         },
         (error) => {
-          console.error('Error fetching officials:', error);
-          this.toastServie.showToast('Failed to load officials', 'error');
+          console.error('Error fetching logs:', error);
+          this.toastServie.showToast('Failed to load logs', 'error');
           this.isLoading = false;
           this.loading = false;
         }
@@ -98,28 +98,32 @@ export class LogsComponent {
         debounceTime(300),  // Wait 300ms after the user stops typing
         distinctUntilChanged()  // Prevent filtering with the same search term
       ).subscribe((searchTerm: string | null) => {
-        this.filterofficials(searchTerm);
+        this.filterlogs(searchTerm);
       });
     }
   
   
-    filterofficials(searchTerm: string | null) {
-      // let searchClient = this.officials
-      if (searchTerm) {
-        console.log(searchTerm)
-        console.log(this.officials)
-        // Filter officials by email, case-insensitive
-        this.officials = this.officials.filter((prof: any) =>
-          prof.performedBy.toLowerCase().includes(searchTerm.toLowerCase())
+    filterlogs(searchTerm: string | null) {
+      const searchLower = (searchTerm || '').toLowerCase();
+
+      this.logs = this.orginalLogs.filter((log: any) => {
+        const id = `${log.id || ''}`.toLowerCase();
+        const actionType = `${log.actionType || ''}`.toLowerCase();
+        const performedBy = `${log.performedBy || ''}`.toLowerCase();
+        const date = `${log.date || ''}`.toLowerCase();
+
+        return (
+          id.includes(searchLower) ||
+          actionType.includes(searchLower) ||
+          performedBy.includes(searchLower) ||
+          date.includes(searchLower)
         );
-      } else {
-        // If search term is empty, reset to the full list
-        this.officials = [...this.orginalOfficials];
-      }
-  
-      // Update pagination after filtering or resetting
+      });
+
+      this.currentPage = 1;
       this.updatePagination();
     }
+
 
     capitalizeWords(str: string): string {
       return str
@@ -141,7 +145,7 @@ export class LogsComponent {
     updatePagination(): void {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
-      this.paginatedData = this.officials.slice(start, end);
+      this.paginatedData = this.logs.slice(start, end);
     }
   
     goToPage(page: number): void {
@@ -151,7 +155,7 @@ export class LogsComponent {
   
         const start = (page - 1) * this.pageSize;
         const end = start + this.pageSize;
-        const nextPageData = this.officials.slice(start, end);
+        const nextPageData = this.logs.slice(start, end);
   
         // Simulate shimmer loading effect with a timeout
         setTimeout(() => {
@@ -171,14 +175,14 @@ export class LogsComponent {
     }
   
     nextPage(): void {
-      const max = Math.ceil(this.officials.length / this.pageSize);
+      const max = Math.ceil(this.logs.length / this.pageSize);
       if (this.currentPage < max) {
         this.goToPage(this.currentPage + 1);
       }
     }
   
     get totalPages(): number {
-      return Math.ceil(this.officials.length / this.pageSize);
+      return Math.ceil(this.logs.length / this.pageSize);
     }
   
   
@@ -227,7 +231,7 @@ export class LogsComponent {
     }
   
     get totalPagesArray() {
-      const count = Math.ceil(this.officials.length / this.pageSize);
+      const count = Math.ceil(this.logs.length / this.pageSize);
       return Array.from({ length: count }, (_, i) => i + 1);
     }
   

@@ -62,19 +62,23 @@ export class ProfessionalComponent implements OnInit {
         console.log(res);
         if (res && res.length > 0) {
 
-          // Store the original list
-          this.professionals = res.map((prof: any) => {
+          let allProfessionals = res.map((prof: any) => {
             const { _id, firstName, lastName, ...rest } = prof;
             return {
               ...rest,
               fullName: `${firstName} ${lastName}`
             };
           });
-          
-          // Initialize the professionals list
-          this.professionals = [...this.professionals];
+
+          // Separate pending and non-pending
+          const pendingProfessionals = allProfessionals.filter((p: any) => p.status?.toLowerCase() === 'pending');
+          const otherProfessionals = allProfessionals.filter((p: any) => p.status?.toLowerCase() !== 'pending');
+
+
+          // Merge with pending at the top
+          this.professionals = [...pendingProfessionals, ...otherProfessionals];
           this.orginalProfessionals = [...this.professionals];
-          
+                    
           this.updatePagination();
     
           setTimeout(() => {
@@ -106,20 +110,29 @@ export class ProfessionalComponent implements OnInit {
   
   
   filterProfessionals(searchTerm: string | null) {
-    // let searchProfessional = this.professionals
-    if (searchTerm) {
-      // Filter professionals by email, case-insensitive
-      this.professionals = this.professionals.filter((prof: any) =>
-        prof.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const searchLower = searchTerm?.toLowerCase() || '';
+
+    this.professionals = this.orginalProfessionals.filter((prof: any) => {
+      const fullName = `${prof.fullName}`.toLowerCase();
+      const email = `${prof.email || ''}`.toLowerCase();
+      const phone = `${prof.phone || ''}`.toLowerCase();
+      const type = `${prof.type || ''}`.toLowerCase();
+      const status = `${prof.status || ''}`.toLowerCase();
+
+      return (
+        fullName.includes(searchLower) ||
+        email.includes(searchLower) ||
+        phone.includes(searchLower) ||
+        type.includes(searchLower) ||
+        status.includes(searchLower)
       );
-    } else {
-      // If search term is empty, reset to the full list
-      this.professionals = [...this.orginalProfessionals];
-    }
-  
-    // Update pagination after filtering or resetting
+    });
+
+    this.currentPage = 1; // Reset to first page on new search
     this.updatePagination();
   }
+
+
   
 
   updatePagination(): void {

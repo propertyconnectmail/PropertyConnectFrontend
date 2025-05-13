@@ -50,7 +50,7 @@ export class DashboardComponent {
     { icon: 'assets/icons/appointment-analytics.svg', title: 'Total Appointments', value: '120' },
     { icon: 'assets/icons/professional-analytics.svg', title: 'Total Professionals', value: '78' },
     { icon: 'assets/icons/client-analytics.svg', title: 'Total Clients', value: '302' },
-    { icon: 'assets/icons/appointment-analytics.svg', title: 'Total Revenue', value: '$12,450' }
+    { icon: 'assets/icons/revenue-analytics.svg', title: 'Total Revenue', value: '$12,450' }
   ];
 
   fullActivityFeed: any[] = [];
@@ -85,7 +85,7 @@ export class DashboardComponent {
           value: stats.totalClients
         },
         {
-          icon: 'assets/icons/appointment-analytics.svg',
+          icon: 'assets/icons/revenue-analytics.svg',
           title: 'Total Revenue',
           value: stats.totalRevenue
         }
@@ -163,18 +163,6 @@ export class DashboardComponent {
 
   onCardClick(card: any): void {
     console.log('Card clicked:', card.title);
-  }
-
-  onSeeAll(): void {
-    console.log('See All clicked');
-    this.authService.logout();
-    this.appComponent.setLoginState(false);
-  }
-
-  confirmLogout(): void {
-    if (confirm('Are you sure you want to logout?')) {
-      this.onSeeAll();
-    }
   }
 
   goToLogs(){

@@ -104,20 +104,24 @@ export class ClientComponent {
 
 
   filterclients(searchTerm: string | null) {
-    // let searchClient = this.clients
-    if (searchTerm) {
-      // Filter clients by email, case-insensitive
-      this.clients = this.clients.filter((prof: any) =>
-        prof.email.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    } else {
-      // If search term is empty, reset to the full list
-      this.clients = [...this.orginalClients];
-    }
+    const searchLower = searchTerm?.toLowerCase() || '';
 
-    // Update pagination after filtering or resetting
+    this.clients = this.orginalClients.filter((client: any) => {
+      const fullName = client.fullName.toLowerCase();
+      const email = client.email?.toLowerCase() || '';
+      const phone = client.phone?.toLowerCase() || '';
+
+      return (
+        fullName.includes(searchLower) ||
+        email.includes(searchLower) ||
+        phone.includes(searchLower)
+      );
+    });
+
+    this.currentPage = 1;
     this.updatePagination();
   }
+
 
 
 

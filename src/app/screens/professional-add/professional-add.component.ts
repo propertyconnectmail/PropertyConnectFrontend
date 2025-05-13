@@ -170,24 +170,22 @@ export class ProfessionalAddComponent implements OnInit {
   }
 
   downloadFilesAsZip(): void {
+    const docs = this.downloadedFiles;
+    if (docs.length === 0) return;
+
+    const apiUrl = 'https://propertconnectbackend.onrender.com/api/certifications/download-zip'; // ✅ same as mobile app
     const params = new URLSearchParams();
-    // Loop through each file object and add the URL to the query string
-    this.downloadedFiles.forEach(file => {
+
+    docs.forEach(file => {
       if (file.url) {
-        params.append('urls', file.url); // Append the URL (file.url) to the query params
+        params.append('urls', file.url);
       }
     });
-  
-    // Create a link element and trigger the download
-    const link = document.createElement('a');
-    link.href = `http://localhost:5000/api/certifications/download-zip?${params.toString()}`;
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 
-    this.toastService.showToast('Files downloaded successfully!', 'success');
+    const downloadUrl = `${apiUrl}?${params.toString()}`;
+    window.open(downloadUrl, '_blank'); // 🔁 Opens download link in new tab
   }
+
   
   setAutoPassword(): void {
     const firstName = this.form.get('firstName')?.value || '';
@@ -278,7 +276,7 @@ export class ProfessionalAddComponent implements OnInit {
       this.uploadService.postProfessionalFiles(formData).subscribe(async(res:any) => {
         if(await res.message === 'Certification files uploaded successfully'){
           professional.certifications = await res.fileUrls;
-          professional.url = 'http://<host>:<port>/<static-path>/<optional-subfolders>/<filename>'
+          professional.url = 'https://property-connect-bucket.s3.eu-north-1.amazonaws.com/profile-image.svg'
 
           this.professionalService.postProfessionalForm(professional).subscribe(async(res:any) => {
             if(await res.message === 'success'){
@@ -296,7 +294,7 @@ export class ProfessionalAddComponent implements OnInit {
                   id: '',
                   actionType: 'create',
                   performedBy: user.email,
-                  description: 'Created professional '+professional.email+' ',
+                  description: 'Created professional - '+professional.email+' ',
                   date: dateString
                 }
 
@@ -358,7 +356,7 @@ export class ProfessionalAddComponent implements OnInit {
             id: '',
             actionType: 'update',
             performedBy: user.email,
-            description: 'Updated professional '+professional.email+' ',
+            description: 'Updated professional - '+professional.email+' ',
             date: dateString
           }
 
@@ -412,7 +410,7 @@ export class ProfessionalAddComponent implements OnInit {
             id: '',
             actionType: 'delete',
             performedBy: user.email,
-            description: 'Deleted professional '+professional.email+' ',
+            description: 'Deleted professional - '+professional.email+' ',
             date: dateString
           }
 

@@ -31,4 +31,13 @@ export class EmployeeService {
   deleteEmployeeForm(employeeForm : any) {
     return this.http.post<any>(this.apiUrl+'delete', employeeForm)
   }
+
+
+  updateEmployeeProfilePicture(ProfessionalForm : any) {
+    return this.http.post<any>(this.apiUrl+'update/picture', ProfessionalForm)
+  }
+
+  updateEmployeePassword(passwordForm : any) {
+    return this.http.post<any>(this.apiUrl+'update/pass', passwordForm)
+  }
 }

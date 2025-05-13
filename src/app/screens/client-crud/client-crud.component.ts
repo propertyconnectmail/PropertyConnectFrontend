@@ -176,7 +176,7 @@ export class ClientCrudComponent implements OnInit {
 
         console.log(client)
 
-        client.url = 'http://<host>:<port>/<static-path>/<optional-subfolders>/<filename>'
+        client.url = 'https://property-connect-bucket.s3.eu-north-1.amazonaws.com/profile-image.svg'
         this.clientService.postClientForm(client).subscribe(async(res:any) => {
           console.log(res)
         if(await res.message === 'success'){
@@ -196,7 +196,7 @@ export class ClientCrudComponent implements OnInit {
               id: '',
               actionType: 'create',
               performedBy: user.email,
-              description: 'Created client '+client.email+' ',
+              description: 'Created client - '+client.email+' ',
               date: dateString
             }
 
@@ -253,7 +253,7 @@ export class ClientCrudComponent implements OnInit {
               id: '',
               actionType: 'update',
               performedBy: user.email,
-              description: 'Updated client '+client.email+' ',
+              description: 'Updated client - '+client.email+' ',
               date: dateString
             }
   
@@ -307,7 +307,7 @@ export class ClientCrudComponent implements OnInit {
               id: '',
               actionType: 'delete',
               performedBy: user.email,
-              description: 'Deleted client '+client.email+' ',
+              description: 'Deleted client - '+client.email+' ',
               date: dateString
             }
   

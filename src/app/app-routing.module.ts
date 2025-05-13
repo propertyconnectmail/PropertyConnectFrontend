@@ -13,6 +13,8 @@ import { RegistryCrudComponent } from './screens/registry-crud/registry-crud.com
 import { OfficialComponent } from './screens/official/official.component';
 import { OfficialCrudComponent } from './screens/official-crud/official-crud.component';
 import { LogsComponent } from './screens/logs/logs.component';
+import { PaymentComponent } from './screens/payment/payment.component';
+import { SettingComponent } from './screens/setting/setting.component';
 
 
 const routes: Routes = [
@@ -34,6 +36,8 @@ const routes: Routes = [
   { path: 'official/:mode', component: OfficialCrudComponent },
   { path: 'official/:mode/:id', component: OfficialCrudComponent },
   { path: 'log', component: LogsComponent },
+  { path: 'payments', component: PaymentComponent },
+  { path: 'settings', component: SettingComponent },
   // Optionally:
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/dashboard' }

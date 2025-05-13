@@ -53,14 +53,15 @@
             border-radius: 0.5rem;
             border: 1px solid #cbd5e1;
             font-size: 0.875rem;
-            min-width: 400px;
+            min-width: 300px;
             background-color: #fff;
-            color: #1e293b;
+            color: #343a40;
             transition: border-color 0.3s ease;
       
             &:focus {
-              border-color: #18a0fb;
+              border-color: #18A0FB;
               outline: none;
+              transition: border-color 0.3s ease;
             }
           }
         }
@@ -282,5 +283,3 @@
     60%  { transform: scale(1.05); }
     100% { transform: scale(1); }
   } 
-
-  

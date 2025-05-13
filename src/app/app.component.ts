@@ -14,14 +14,11 @@ export class AppComponent implements OnInit {
   isLoading = false;
   currentYear = new Date().getFullYear();
 
-  ngOnInit(): void {
-    const user = localStorage.getItem('user');
-    this.isLoggedIn = !!user;
-    console.log(this.isLoggedIn)
-  }
+  constructor(private authService: AuthService) {}
 
-  // Allow other components to update login state
-  setLoginState(state: boolean): void {
-    this.isLoggedIn = state;
+  ngOnInit(): void {
+    this.authService.isLoggedIn().subscribe((status: boolean) => {
+      this.isLoggedIn = status;
+    });
   }
 }

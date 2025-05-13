@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { EmployeeService } from '../../_services/employee/employee.service';
+import { UserstateService } from '../../core/services/userstate/userstate.service';
 
 @Component({
   selector: 'app-topbar',
@@ -14,16 +16,24 @@ export class TopbarComponent implements OnInit {
   name = "";
   type = "";
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private employeeService : EmployeeService, private cdref: ChangeDetectorRef, private userstateService : UserstateService) {}
 
   ngOnInit(): void {
     const storedUser : any = localStorage.getItem('user');
     const user = JSON.parse(storedUser);
 
-    this.imageUrl = user.url;
-    this.name = user.firstName+ ' '+user.lastName;
-    this.type = user.type;
-    this.setPageTitle(this.router.url);
+    this.employeeService.getEmployeeForm({email : user.email}).subscribe(async(employee:any)=>{
+      this.imageUrl = employee.url;
+      this.name = employee.firstName+ ' '+employee.lastName;
+      this.type = employee.type;
+      this.setPageTitle(this.router.url);
+    })
+
+    this.userstateService.imageUrl$.subscribe(newUrl => {
+      if (newUrl) {
+        this.imageUrl = newUrl;
+      }
+    });
 
     // Listen for route changes and update the title accordingly
     this.router.events.pipe(
@@ -31,6 +41,10 @@ export class TopbarComponent implements OnInit {
     ).subscribe(() => {
       this.setPageTitle(this.router.url);
     });
+  }
+
+  setProfileImage(url:string): void{
+    this.imageUrl = url;
   }
 
   setPageTitle(url: string): void {
@@ -43,9 +57,9 @@ export class TopbarComponent implements OnInit {
       '/registry': 'Registry Location Management',
       '/official': 'Official Management',
       '/log': 'Audit Log Management',
-      '/payment': 'Payments',
+      '/payments': 'Payment Management',
       '/review': 'reviews',
-      '/setting': 'Settings'
+      '/settings': 'Profile Settings'
     };
 
     // Check if the URL starts with one of the base routes and set the title
@@ -61,6 +75,10 @@ export class TopbarComponent implements OnInit {
       this.pageTitle = 'Offical Management';
     }else if (url.startsWith('/log')) {
       this.pageTitle = 'Audit Log Management';
+    } else if (url.startsWith('/payments')){
+      this.pageTitle = 'Payment Management';
+    }else if (url.startsWith('/settings')){
+      this.pageTitle = 'Profile Management';
     }else {
       // For exact matches, use the routeMap
       this.pageTitle = routeMap[url] || 'Dashboard'; // Default to Dashboard if no match

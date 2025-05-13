@@ -165,7 +165,7 @@ export class OfficialCrudComponent {
 
         this.isSubmitting = true;
 
-        officials.url = 'http://<host>:<port>/<static-path>/<optional-subfolders>/<filename>'
+        officials.url = 'https://property-connect-bucket.s3.eu-north-1.amazonaws.com/profile-image.svg'
         this.officialService.postOfficialForm(officials).subscribe(async(res:any) => {
           console.log(res)
         if(await res.message === 'success'){
@@ -180,7 +180,7 @@ export class OfficialCrudComponent {
             id: '',
             actionType: 'create',
             performedBy: user.email,
-            description: 'Created official '+officials.email+' ',
+            description: 'Created official - '+officials.id+' ',
             date: dateString
           }
 
@@ -237,7 +237,7 @@ export class OfficialCrudComponent {
               id: '',
               actionType: 'update',
               performedBy: user.email,
-              description: 'Updated official '+officials.email+' ',
+              description: 'Updated official - '+officials.id+' ',
               date: dateString
             }
   
@@ -290,7 +290,7 @@ export class OfficialCrudComponent {
               id: '',
               actionType: 'delete',
               performedBy: user.email,
-              description: 'Deleted official '+officials.email+' ',
+              description: 'Deleted official - '+officials.email+' ',
               date: dateString
             }
   

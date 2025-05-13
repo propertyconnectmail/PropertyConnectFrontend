@@ -34,7 +34,7 @@ interface Official {
     ])
   ]
 })
-export class OfficialComponent {
+export class OfficialComponent implements OnInit {
   constructor(private router: Router, private officialService: OfficialService, private toastServie: ToastService) { }
   
     searchControl = new FormControl('');
@@ -105,22 +105,28 @@ export class OfficialComponent {
   
   
     filterofficials(searchTerm: string | null) {
-      // let searchClient = this.officials
-      if (searchTerm) {
-        console.log(searchTerm)
-        console.log(this.officials)
-        // Filter officials by email, case-insensitive
-        this.officials = this.officials.filter((prof: any) =>
-          prof.district.toLowerCase().includes(searchTerm.toLowerCase())
+      const searchLower = (searchTerm || '').toLowerCase();
+
+      this.officials = this.orginalOfficials.filter((official: any) => {
+        const id = `${official.id || ''}`.toLowerCase();
+        const fullName = `${official.fullName || ''}`.toLowerCase();
+        const district = `${official.district || ''}`.toLowerCase();
+        const province = `${official.province || ''}`.toLowerCase();
+        const type = `${official.type || ''}`.toLowerCase();
+
+        return (
+          id.includes(searchLower) ||
+          fullName.includes(searchLower) ||
+          district.includes(searchLower) ||
+          province.includes(searchLower) ||
+          type.includes(searchLower)
         );
-      } else {
-        // If search term is empty, reset to the full list
-        this.officials = [...this.orginalOfficials];
-      }
-  
-      // Update pagination after filtering or resetting
+      });
+
+      this.currentPage = 1;
       this.updatePagination();
     }
+
 
     capitalizeWords(str: string): string {
       return str

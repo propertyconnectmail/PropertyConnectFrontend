@@ -105,20 +105,26 @@ export class EmployeeComponent {
   
   
     filteremployees(searchTerm: string | null) {
-      // let searchClient = this.employees
-      if (searchTerm) {
-        // Filter employees by email, case-insensitive
-        this.employees = this.employees.filter((prof: any) =>
-          prof.email.toLowerCase().includes(searchTerm.toLowerCase())
+      const searchLower = (searchTerm || '').toLowerCase();
+
+      this.employees = this.orginalEmployees.filter((emp: any) => {
+        const fullName = `${emp.fullName}`.toLowerCase();
+        const email = `${emp.email || ''}`.toLowerCase();
+        const phone = `${emp.phone || ''}`.toLowerCase();
+        const type = `${emp.type || ''}`.toLowerCase();
+
+        return (
+          fullName.includes(searchLower) ||
+          email.includes(searchLower) ||
+          phone.includes(searchLower) ||
+          type.includes(searchLower)
         );
-      } else {
-        // If search term is empty, reset to the full list
-        this.employees = [...this.orginalEmployees];
-      }
-  
-      // Update pagination after filtering or resetting
+      });
+
+      this.currentPage = 1; // Reset to first page
       this.updatePagination();
     }
+
   
   
   

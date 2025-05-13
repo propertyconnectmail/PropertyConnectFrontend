@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
-import { AppComponent } from '../../app.component';
 
 import {trigger, transition, style, animate} from '@angular/animations';
+import { Router } from '@angular/router';
+import { ToastService } from '../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ export class LoginComponent {
   isSubmitting = false;
   loginError: string | null = null;
 
-  constructor(private fb: FormBuilder,private authService: AuthService,private appComponent: AppComponent) {
+  constructor(private fb: FormBuilder,private authService: AuthService, private router : Router, private toastService : ToastService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -42,53 +43,44 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
+    console.log("in login")
 
-    this.isSubmitting = true;
+    if (this.loginForm.invalid){
+      this.loginForm.markAllAsTouched();
+      this.toastService.showToast('Please enter your email and password!', 'error');
+      return;
+    }
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        setTimeout(() => {
-          // Save user to localStorage
+    if(this.loginForm.valid){
+      const { ...rest } = this.loginForm.value;
+
+      let employee: any = {
+        ...rest,
+      };
+
+      this.isSubmitting = true;
+      
+      this.authService.login(employee).subscribe(async(res:any) => {
+        console.log(res)
+        if(res.email){
+          this.isSubmitting = false;
+          this.toastService.showToast('Login Successful!', 'info');
           localStorage.setItem('user', JSON.stringify(res));
-          this.appComponent.setLoginState(true);
+          this.authService.setLoginState(true);
+          this.router.navigate(['/dashboard'])
+          return
+        }
+        if(res.Error === 'Email or Password is Incorrect'){
           this.isSubmitting = false;
-        }, 1500); // Keep your animation delay
-      },
-      error: (err) => {
-        setTimeout(() => {
-          this.loginError = 'Invalid email or password';
+          this.toastService.showToast('Email or password is incorrect!', 'error');
+          return
+        }
+        if(res.email != employee.email){
           this.isSubmitting = false;
-        }, 1500);
-      },
-    });
+          this.toastService.showToast('Something went wrong please try again later!', 'error');
+          return
+        }
+      })
+    }
   }
-
-
-  // loginForm: FormGroup;
-  // hidePassword = true;
-  // isSubmitting = false;
-
-  // constructor(private fb: FormBuilder) {
-  //   this.loginForm = this.fb.group({
-  //     email: ['', [Validators.required, Validators.email]],
-  //     password: ['', [Validators.required, Validators.minLength(6)]],
-  //   });
-  // }
-
-  // togglePassword(): void {
-  //   this.hidePassword = !this.hidePassword;
-  // }
-
-  // onSubmit(): void {
-  //   if (this.loginForm.invalid) return;
-
-  //   this.isSubmitting = true;
-
-  //   // Simulate API delay
-  //   setTimeout(() => {
-  //     console.log('Login data:', this.loginForm.value);
-  //     this.isSubmitting = false;
-  //   }, 1500);
-  // }
 }

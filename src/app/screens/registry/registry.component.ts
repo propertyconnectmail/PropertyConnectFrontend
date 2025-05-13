@@ -104,20 +104,24 @@ export class RegistryComponent {
   
   
   filterregistryLocations(searchTerm: string | null) {
-    // let searchProfessional = this.registryLocations
-    if (searchTerm) {
-      // Filter registryLocations by email, case-insensitive
-      this.registryLocations = this.registryLocations.filter((prof: any) =>
-        prof.district.toLowerCase().includes(searchTerm.toLowerCase())
+    const searchLower = (searchTerm || '').toLowerCase();
+
+    this.registryLocations = this.orginalRegistryLocations.filter((loc: any) => {
+      const locationName = `${loc.locationName || ''}`.toLowerCase();
+      const district = `${loc.district || ''}`.toLowerCase();
+      const province = `${loc.province || ''}`.toLowerCase();
+
+      return (
+        locationName.includes(searchLower) ||
+        district.includes(searchLower) ||
+        province.includes(searchLower)
       );
-    } else {
-      // If search term is empty, reset to the full list
-      this.registryLocations = [...this.orginalRegistryLocations];
-    }
-  
-    // Update pagination after filtering or resetting
+    });
+
+    this.currentPage = 1; // Reset to first page
     this.updatePagination();
   }
+
   
 
   updatePagination(): void {

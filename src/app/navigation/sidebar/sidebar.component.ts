@@ -27,7 +27,7 @@ export class SidebarComponent {
     { icon: 'assets/menu/registry-icon.svg', label: 'Registry Locations', route: '/registry' },
     { icon: 'assets/menu/official-icon.svg', label: 'Officials', route: '/official' },
     { icon: 'assets/menu/log-icon.svg', label: 'Logs', route: '/log' },
-    { icon: 'assets/menu/notifications-icon.svg', label: 'Notifications', route: '/notifications' },
+    // { icon: 'assets/menu/notifications-icon.svg', label: 'Notifications', route: '/notifications' },
     { icon: 'assets/menu/payments-icon.svg', label: 'Payments', route: '/payments' },
     { icon: 'assets/menu/settings-icon.svg', label: 'Settings', route: '/settings' }
   ];
