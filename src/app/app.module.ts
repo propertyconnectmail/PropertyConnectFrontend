@@ -10,14 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
-import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 import { SidebarComponent } from './navigation/sidebar/sidebar.component';
 import { DashboardComponent } from './screens/dashboard/dashboard.component';
 import { TopbarComponent } from './navigation/topbar/topbar.component';
 import { ProfessionalComponent } from './screens/professional/professional.component';
 import { ProfessionalAddComponent } from './screens/professional-add/professional-add.component';
 import { ToastComponent } from './core/components/toast/toast.component';
-import { SafePipe } from './core/pipes/safe.pipe';
 import { ClientComponent } from './screens/client/client.component';
 import { ClientCrudComponent } from './screens/client-crud/client-crud.component';
 import { EmployeeComponent } from './screens/employee/employee.component';
@@ -34,14 +32,12 @@ import { PaymentComponent } from './screens/payment/payment.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    AdminLayoutComponent,
     SidebarComponent,
     DashboardComponent,
     TopbarComponent,
     ProfessionalComponent,
     ProfessionalAddComponent,
     ToastComponent,
-    SafePipe,
     ClientComponent,
     ClientCrudComponent,
     EmployeeComponent,
