@@ -48,6 +48,9 @@ export class ProfessionalAddComponent implements OnInit {
 
   ngOnInit(): void {
 
+    const storedUser : any = localStorage.getItem('user');
+    const user = JSON.parse(storedUser);
+
     this.route.paramMap.subscribe(params => {
       this.mode = params.get('mode')!;
 
@@ -62,6 +65,26 @@ export class ProfessionalAddComponent implements OnInit {
           if(professional.email === id){
             this.loadData(professional);
             this.form.disable();
+
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+  
+            const dateString: string = `${day}/${month}/${year}`;
+  
+            let auditlog = {
+              id: '',
+              actionType: 'view',
+              performedBy: user.email,
+              description: 'Viewed professional - '+professional.email+' ',
+              date: dateString
+            }
+  
+            this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
+              //
+            })
 
             this.downloadedFiles = professional.certifications.map((url: string) => {
               const name = url.split('/').pop(); // Extract filename from URL

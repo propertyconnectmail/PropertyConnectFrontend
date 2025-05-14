@@ -32,6 +32,8 @@ export class OfficialCrudComponent {
     constructor(private fb: FormBuilder, private location : Location, private platformService : PlatformService, private toastService: ToastService, private route: ActivatedRoute, private officialService : OfficialService, private registryService : RegistryService) {}
   
     ngOnInit(): void {
+      const storedUser : any = localStorage.getItem('user');
+      const user = JSON.parse(storedUser);
   
       this.route.paramMap.subscribe(params => {
         this.mode = params.get('mode')!;
@@ -54,6 +56,25 @@ export class OfficialCrudComponent {
             if(officials.id === id){
               this.loadData(officials);
               this.form.disable();
+
+              const now = new Date();
+              const day = String(now.getDate()).padStart(2, '0');
+              const month = String(now.getMonth() + 1).padStart(2, '0');
+              const year = now.getFullYear();
+    
+              const dateString: string = `${day}/${month}/${year}`;
+    
+              let auditlog = {
+                id: '',
+                actionType: 'view',
+                performedBy: user.email,
+                description: 'Viewed official - '+officials.id+' ',
+                date: dateString
+              }
+    
+              this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
+                //
+              })
             }else {
               this.toastService.showToast('Error loading data. Try again later!', 'error');
             }

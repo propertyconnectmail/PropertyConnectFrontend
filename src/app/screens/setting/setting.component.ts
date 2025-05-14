@@ -321,15 +321,57 @@ export class SettingComponent implements OnInit {
     }
 
     onToggleMaintenance(): void {
+      const storedUser : any = localStorage.getItem('user');
+      const user = JSON.parse(storedUser);
+
       const mode = this.maintenanceMode ? 'on' : 'off';
       this.platformService.updateMaintenanceMode({ id: '1', maintenanceMode: mode }).subscribe((res: any) => {
         console.log(res)
         if (res.message === 'success' && mode === 'on') {
           this.toastService.showToast('Maintenance mode turned on!', 'info');
+
+          const now = new Date();
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const year = now.getFullYear();
+
+          const dateString: string = `${day}/${month}/${year}`;
+
+          let auditlog = {
+            id: '',
+            actionType: 'view',
+            performedBy: user.email,
+            description: 'Maintainance mode status - ON',
+            date: dateString
+          }
+
+          this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
+            //
+          })
           return
         }
         if (res.message === 'success' && mode === 'off') {
           this.toastService.showToast('Maintenance mode turned off!', 'info');
+
+
+          const now = new Date();
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const year = now.getFullYear();
+
+          const dateString: string = `${day}/${month}/${year}`;
+
+          let auditlog = {
+            id: '',
+            actionType: 'view',
+            performedBy: user.email,
+            description: 'Maintainance mode status - OFF',
+            date: dateString
+          }
+
+          this.platformService.createAuditLog(auditlog).subscribe(async(res:any) =>{
+            //
+          })
           return;
         } else {
           this.toastService.showToast('Failed to update platform settings.', 'error');
