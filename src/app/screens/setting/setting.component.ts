@@ -339,7 +339,7 @@ export class SettingComponent implements OnInit {
 
           let auditlog = {
             id: '',
-            actionType: 'view',
+            actionType: 'update',
             performedBy: user.email,
             description: 'Maintainance mode status - ON',
             date: dateString
@@ -363,7 +363,7 @@ export class SettingComponent implements OnInit {
 
           let auditlog = {
             id: '',
-            actionType: 'view',
+            actionType: 'update',
             performedBy: user.email,
             description: 'Maintainance mode status - OFF',
             date: dateString
